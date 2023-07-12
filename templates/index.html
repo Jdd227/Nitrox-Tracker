@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nitrox Sign Out</title>
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #69768f;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        select {
+            background-color: #fff;
+        }
+
+        .signature-field {
+            margin-bottom: 20px;
+        }
+
+        .signature-pad {
+            width: 100%;
+            border: 1px solid #ccc;
+            height: 200px;
+        }
+
+        .signature-pad canvas {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #837b7b;
+        }
+
+        .signature-pad button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .signature-display {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signature-display img {
+            max-width: 300px;
+            max-height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nitrox Sign Out</h1>
+        <form action="/submit" method="POST">
+            <label for="date">Date:</label>
+            <input type="date" name="date" required>
+
+            <label for="diver_name">Diver Name:</label>
+            <input type="text" name="diver_name" required>
+
+            <label for="tank_serial_number">Tank Serial Number:</label>
+            <input type="text" name="tank_serial_number" required>
+
+            <label for="nitrox_percentage">Nitrox Percentage:</label>
+            <input type="text" name="nitrox_percentage" required>
+
+            <label for="approval_status">Approval Status:</label>
+            <select name="approval_status">
+                <option value="Approved">Approved</option>
+                <option value="Denied">Denied</option>
+            </select>
+
+            <div class="signature-field">
+                <label for="diver_signature">Diver Signature:</label>
+                <div class="signature-pad">
+                    <canvas id="signatureCanvas"></canvas>
+                </div>
+                <button type="button" onclick="clearSignature()">Clear Signature</button>
+                <input type="hidden" name="diver_signature" id="diverSignatureInput">
+            </div>
+
+            <input type="submit" value="Submit">
+
+            <!-- Signature display section -->
+            <div class="signature-display">
+                <img id="signatureImage">
+            </div>
+        </form>
+    </div>
+
+    <!-- Include SignaturePad library -->
+    <script src="https://unpkg.com/signature_pad"></script>
+
+    <script>
+        // Signature pad functionality
+        const signatureCanvas = document.getElementById('signatureCanvas');
+        const signaturePad = new SignaturePad(signatureCanvas);
+        const signatureInput = document.getElementById('diverSignatureInput');
+        const signatureImage = document.getElementById('signatureImage');
+
+        function clearSignature() {
+            signaturePad.clear();
+            signatureInput.value = '';
+            signatureImage.src = '';
+        }
+
+        signatureCanvas.addEventListener('mouseup', () => {
+            const signatureData = signaturePad.toDataURL();
+            signatureInput.value = signatureData;
+            signatureImage.src = signatureData;
+        });
+    </script>
+</body>
+</html>
